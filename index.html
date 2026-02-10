@@ -5,127 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Selamat Ulang Tahun</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: #fff5f5; /* Warna pink sangat muda */
-            font-family: 'Georgia', serif;
-            color: #4a4a4a;
-            overflow: hidden;
-            text-align: center;
-        }
-
-        #content-wrapper {
-            max-width: 80%;
-            z-index: 10;
-        }
-
-        button {
-            padding: 15px 35px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            border: none;
-            border-radius: 30px;
-            background-color: #ff8e8e;
-            color: white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #ff7676;
-            transform: scale(1.05);
-        }
-
-        .puisi {
-            display: none;
-            line-height: 1.8;
-            font-size: 1.2rem;
-            animation: fadeIn 3s;
-        }
-
-        .video-box {
-            display: none;
-            margin-top: 20px;
-            border: 5px solid white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            width: 320px;
-            height: 450px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .date {
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: #888;
-        }
+        body { margin: 0; background: #000; color: white; font-family: 'Georgia', serif; overflow: hidden; height: 100vh; display: flex; justify-content: center; align-items: center; }
+        #setup-section { text-align: center; z-index: 100; }
+        button { padding: 15px 30px; font-size: 1.2rem; cursor: pointer; border: none; border-radius: 50px; background: #ff4757; color: white; transition: 0.3s; box-shadow: 0 0 20px rgba(255, 71, 87, 0.4); }
+        
+        #display-area { display: none; position: relative; width: 100%; height: 100%; text-align: center; }
+        .slide-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.5s; filter: brightness(0.6); }
+        .slide-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; font-size: 1.4rem; line-height: 1.6; text-shadow: 2px 2px 15px rgba(0,0,0,1); opacity: 0; transition: opacity 1s; }
+        .active { opacity: 1; }
     </style>
 </head>
 <body>
 
-    <div id="content-wrapper">
-        <div id="button-section">
-            <button id="main-btn" onclick="handleStep()">tolong tekan</button>
-        </div>
+    <div id="setup-section">
+        <button id="main-btn" onclick="nextStep()">tolong tekan</button>
+    </div>
 
-        <div id="reveal-section" class="puisi">
-            <p>Cahaya lembut yang tak pernah padam di rumah ini.</p>
-            <p>Melihatmu memeluk mereka, menenangkan tangis itu,</p>
-            <p>Terima kasih telah menjadi pelabuhan yang tenang,</p>
-            <p>Tempat kami pulang saat dunia terasa gersang.</p>
-            <p>Terima kasih telah mencintai anak-anak kita dengan hebat,</p>
-            <p>Semoga bahagia selalu memelukmu erat.</p>
-            
-            <div class="date">11 Februari 2026</div>
+    <div id="display-area">
+        <img class="slide-img" src="jpg1.jpg">
+        <img class="slide-img" src="jpg2.jpg">
+        <img class="slide-img" src="jpg3.jpg">
+        <img class="slide-img" src="jpg4.jpg">
+        <img class="slide-img" src="jpg5.jpg">
 
-            <div class="video-box">
-                <iframe src="https://drive.google.com/embeddedfolderview?id=1Pto84QSgHLIHDn_m7NByuGeOfqAoXxQF#grid" 
-                        width="100%" height="100%" frameborder="0"></iframe>
-            </div>
-        </div>
+        <div class="slide-text">Terima kasih telah menjadi pelabuhan yang tenang,</div>
+        <div class="slide-text">Tempat kami pulang saat dunia terasa gersang.</div>
+        <div class="slide-text">Terima kasih telah mencintai anak-anak kita dengan hebat,</div>
+        <div class="slide-text">Semoga bahagia selalu memelukmu erat.<br><br><span style="font-size: 0.9rem; opacity: 0.7;">11 Februari 2026</span></div>
     </div>
 
     <audio id="backsound" loop>
-        <source src="https://docs.google.com/uc?export=download&id=1D07eKHAlJrpcZW5BCgtuLnEE_tr5qsQr" type="audio/mpeg">
+        <source src="music.mp3" type="audio/mpeg">
     </audio>
 
     <script>
         let step = 1;
+        let currentSlide = 0;
         const btn = document.getElementById('main-btn');
-        const buttonSection = document.getElementById('button-section');
-        const revealSection = document.getElementById('reveal-section');
         const audio = document.getElementById('backsound');
 
-        function handleStep() {
-            if (step === 1) {
-                btn.innerText = "lebih lembut";
-                step++;
-            } else if (step === 2) {
-                btn.innerText = "dengan kasih sayang";
-                step++;
-            } else {
-                showFinal();
-            }
+        function nextStep() {
+            if (step === 1) { btn.innerText = "lebih lembut"; step++; }
+            else if (step === 2) { btn.innerText = "dengan kasih sayang"; step++; }
+            else { startShow(); }
         }
 
-        function showFinal() {
-            // Sembunyikan tombol
-            buttonSection.style.display = 'none';
-            // Tampilkan puisi dan video
-            revealSection.style.display = 'block';
-            document.querySelector('.video-box').style.display = 'block';
-            // Putar audio
-            audio.play().catch(e => console.log("Autoplay blocked, but triggered by click."));
+        function startShow() {
+            document.getElementById('setup-section').style.display = 'none';
+            document.getElementById('display-area').style.display = 'block';
+            audio.play().catch(e => console.log("Audio play failed"));
+            runSlideshow();
+        }
+
+        function runSlideshow() {
+            const images = document.querySelectorAll('.slide-img');
+            const texts = document.querySelectorAll('.slide-text');
+            
+            function showNext() {
+                // Sembunyikan semua foto & teks
+                images.forEach(img => img.classList.remove('active'));
+                texts.forEach(txt => txt.classList.remove('active'));
+
+                // Tampilkan foto saat ini
+                images[currentSlide % images.length].classList.add('active');
+                
+                // Ganti teks setiap 2 foto agar tidak terlalu cepat
+                let textIndex = Math.floor(currentSlide / 2);
+                if(texts[textIndex]) {
+                    texts[textIndex].classList.add('active');
+                } else {
+                    // Jika teks habis, tetap tampilkan teks terakhir
+                    texts[texts.length - 1].classList.add('active');
+                }
+
+                currentSlide++;
+                // Ganti slide setiap 4 detik
+                setTimeout(showNext, 4000); 
+            }
+            showNext();
         }
     </script>
 </body>
