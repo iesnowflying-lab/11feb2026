@@ -7,11 +7,11 @@
     <style>
         body { margin: 0; background: #000; color: white; font-family: 'Georgia', serif; overflow: hidden; height: 100vh; display: flex; justify-content: center; align-items: center; }
         #setup-section { text-align: center; z-index: 100; }
-        button { padding: 15px 30px; font-size: 1.2rem; cursor: pointer; border: none; border-radius: 50px; background: #ff4757; color: white; transition: 0.3s; box-shadow: 0 0 20px rgba(255, 71, 87, 0.4); }
+        button { padding: 15px 35px; font-size: 1.2rem; cursor: pointer; border: none; border-radius: 50px; background: #ff4757; color: white; transition: 0.3s; box-shadow: 0 0 20px rgba(255, 71, 87, 0.4); }
         
         #display-area { display: none; position: relative; width: 100%; height: 100%; text-align: center; }
-        .slide-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.5s; filter: brightness(0.6); }
-        .slide-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; font-size: 1.4rem; line-height: 1.6; text-shadow: 2px 2px 15px rgba(0,0,0,1); opacity: 0; transition: opacity 1s; }
+        .slide-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 2s ease-in-out; filter: brightness(0.5); }
+        .slide-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; font-size: 1.5rem; line-height: 1.8; text-shadow: 2px 2px 15px rgba(0,0,0,1); opacity: 0; transition: opacity 1.5s; z-index: 10; }
         .active { opacity: 1; }
     </style>
 </head>
@@ -22,20 +22,26 @@
     </div>
 
     <div id="display-area">
-        <img class="slide-img" src="jpg1.jpg">
-        <img class="slide-img" src="jpg2.jpg">
-        <img class="slide-img" src="jpg3.jpg">
-        <img class="slide-img" src="jpg4.jpg">
-        <img class="slide-img" src="jpg5.jpg">
+        <img class="slide-img" src="jpg1.jpeg">
+        <img class="slide-img" src="jpg2.jpeg">
+        <img class="slide-img" src="jpg3.jpeg">
+        <img class="slide-img" src="jpg4.jpeg">
+        <img class="slide-img" src="jpg5.jpeg">
+        <img class="slide-img" src="jpg6.jpeg">
+        <img class="slide-img" src="jpg7.jpeg">
+        <img class="slide-img" src="jpg8.jpeg">
+        <img class="slide-img" src="jpg9.jpeg">
 
+        <div class="slide-text">Cahaya lembut yang tak pernah padam di rumah ini.</div>
+        <div class="slide-text">Melihatmu memeluk mereka, menenangkan tangis itu,</div>
         <div class="slide-text">Terima kasih telah menjadi pelabuhan yang tenang,</div>
         <div class="slide-text">Tempat kami pulang saat dunia terasa gersang.</div>
         <div class="slide-text">Terima kasih telah mencintai anak-anak kita dengan hebat,</div>
-        <div class="slide-text">Semoga bahagia selalu memelukmu erat.<br><br><span style="font-size: 0.9rem; opacity: 0.7;">11 Februari 2026</span></div>
+        <div class="slide-text">Semoga bahagia selalu memelukmu erat.<br><br><span style="font-size: 1rem; opacity: 0.8;">11 Februari 2026</span></div>
     </div>
 
     <audio id="backsound" loop>
-        <source src="music.mp3" type="audio/mpeg">
+        <source src="Music.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -53,7 +59,7 @@
         function startShow() {
             document.getElementById('setup-section').style.display = 'none';
             document.getElementById('display-area').style.display = 'block';
-            audio.play().catch(e => console.log("Audio play failed"));
+            audio.play().catch(e => console.log("Musik butuh klik manual"));
             runSlideshow();
         }
 
@@ -62,25 +68,23 @@
             const texts = document.querySelectorAll('.slide-text');
             
             function showNext() {
-                // Sembunyikan semua foto & teks
+                // Reset semua
                 images.forEach(img => img.classList.remove('active'));
                 texts.forEach(txt => txt.classList.remove('active'));
 
-                // Tampilkan foto saat ini
+                // Tampilkan foto (ganti setiap slide)
                 images[currentSlide % images.length].classList.add('active');
                 
-                // Ganti teks setiap 2 foto agar tidak terlalu cepat
+                // Ganti teks setiap 2 kali ganti foto (durasi lebih lama untuk membaca)
                 let textIndex = Math.floor(currentSlide / 2);
                 if(texts[textIndex]) {
                     texts[textIndex].classList.add('active');
                 } else {
-                    // Jika teks habis, tetap tampilkan teks terakhir
                     texts[texts.length - 1].classList.add('active');
                 }
 
                 currentSlide++;
-                // Ganti slide setiap 4 detik
-                setTimeout(showNext, 4000); 
+                setTimeout(showNext, 4000); // Slide berganti tiap 4 detik
             }
             showNext();
         }
